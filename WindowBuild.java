@@ -1,12 +1,10 @@
 import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.Random;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -37,10 +35,7 @@ public class WindowBuild {
 	private JLabel mainIcon;
     private static JLabel buyIcon;
     
-	int money = 100;
-    int item_alientech = 0;
-    int item_reactorcore = 0;
-    int item_compresseduranium = 0;
+	
 
 	/**
 	 * Launch the application.
@@ -63,7 +58,7 @@ public class WindowBuild {
 	 */
 	public WindowBuild() {
 		initialize();
-		clearSpace();
+		helper.clearSpace();
 	}
 
 	/**
@@ -166,8 +161,8 @@ public class WindowBuild {
 	                            if (option == 0) {
 	                                    int n = prices.get(inventory.get(x-1));
 	                                    inventory.remove(x-1);
-	                                    money = money + n;
-	                                    JOptionPane.showMessageDialog(null,"Transaction successful. You now have " + money + " dollars.");
+	                                    constants.money = constants.money + n;
+	                                    JOptionPane.showMessageDialog(null,"Transaction successful. You now have " + constants.money + " dollars.");
 	                    				lblMessage2.setText("Inventory:"  + inventory);
 	                            }
 	                        }
@@ -193,7 +188,7 @@ public class WindowBuild {
                             if (shopPrices.get(x-1) == 999999) {
                             	JOptionPane.showMessageDialog(null, "We're sold out for that item");
                             	continue;
-                            } else if (money < shopPrices.get(x-1)) {
+                            } else if (constants.money < shopPrices.get(x-1)) {
                                 JOptionPane.showMessageDialog(null,"You don't have enough money.");
                                 continue;
                             }
@@ -204,9 +199,9 @@ public class WindowBuild {
                                 inventory.add(shop.get(x-1));
                                 shop.set(x-1, "Sold Out");
                                 shopPrices.set(x-1, 999999);
-                                money = money - n;
-                                lblMessage.setText("Money: $" + money + "     Items for Sale: ");
-                                JOptionPane.showMessageDialog(null, "Transaction successful. You now have " + money + " dollars.");
+                                constants.money = constants.money - n;
+                                lblMessage.setText("Money: $" + constants.money + "     Items for Sale: ");
+                                JOptionPane.showMessageDialog(null, "Transaction successful. You now have " + constants.money + " dollars.");
                                 if (numberB == 1) {
                                 	shopit.setText("Sold Out");
                                 } else if (numberB == 2) {
@@ -237,36 +232,36 @@ public class WindowBuild {
 		buttonB.setBackground(Color.LIGHT_GRAY);
 		buttonB.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				clearSpace();
-				if (money < 200) {
+				helper.clearSpace();
+				if (constants.money < 200) {
 					JOptionPane.showMessageDialog(null, "You are able to buy Tier 1 items");
-				} else if (money < 1500) {
+				} else if (constants.money < 1500) {
 					JOptionPane.showMessageDialog(null, "You are able to buy Tier 2 items");
-				} else if (money < 5000) {
+				} else if (constants.money < 5000) {
 					JOptionPane.showMessageDialog(null, "You are able to buy Tier 3 items");
-				} else if (money < 40000) {
+				} else if (constants.money < 40000) {
 					JOptionPane.showMessageDialog(null, "You are able to buy Tier 4 items");
 				}
 				infoMessage.setText("Here you can buy any of three items for cash.");
 				extra.setText("Topmost item is 1 and so on.");
-				lblMessage.setText("Money: $" + money + "     Items for Sale: ");
+				lblMessage.setText("Money: $" + constants.money + "     Items for Sale: ");
 				
 				
                 shop.clear();
                 shopPrices.clear();
-                item_alientech = 0;
-                item_reactorcore = 0;
-                item_compresseduranium = 0;
-				String ultanswer = generateShop(prices, shop, shopPrices, 
-						item_compresseduranium, item_reactorcore, item_compresseduranium);
-				String ultanswer1 = generateShop(prices, shop, shopPrices,
-						item_compresseduranium, item_reactorcore, item_compresseduranium);
-				String ultanswer2 = generateShop(prices, shop, shopPrices, 
-						item_compresseduranium, item_reactorcore, item_compresseduranium);
+                constants.item_alientech = 0;
+                constants.item_reactorcore = 0;
+                constants.item_compresseduranium = 0;
+				String ultanswer = helper.generateShop(prices, shop, shopPrices, 
+						constants.item_compresseduranium, constants.item_reactorcore, constants.item_compresseduranium);
+				String ultanswer1 = helper.generateShop(prices, shop, shopPrices,
+						constants.item_compresseduranium, constants.item_reactorcore, constants.item_compresseduranium);
+				String ultanswer2 = helper.generateShop(prices, shop, shopPrices, 
+						constants.item_compresseduranium, constants.item_reactorcore, constants.item_compresseduranium);
 				shopit.setText(ultanswer);
 				shopit1.setText(ultanswer1);
 				shopit2.setText(ultanswer2);
-				addBuy();
+				helper.addBuy();
 				
 			}
 		});
@@ -284,11 +279,11 @@ public class WindowBuild {
 		buttonS.setBackground(Color.LIGHT_GRAY);
 		buttonS.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				clearSpace();
+				helper.clearSpace();
 				infoMessage.setText("Please type the number of the item that you want to sell");
 				lblMessage2.setText("Inventory:"  + inventory);
 				extra.setText("Leftmost item is 1 and so on.");
-				addSell();
+				helper.addSell();
 			}
 		});
 		buttonS.setBounds(309, 70, 120, 60);
@@ -314,12 +309,12 @@ public class WindowBuild {
 		buttonV.setBackground(Color.LIGHT_GRAY);
 		buttonV.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				clearSpace();
+				helper.clearSpace();
 				infoMessage.setText("Please type the number of the item that you want to learn more about.");
-				lblMessage.setText("You currently have " + money + " dollars");
+				lblMessage.setText("You currently have " + constants.money + " dollars");
 				lblMessage2.setText("Inventory:" + inventory);
 				extra.setText("Leftmost item is 1 and so on.");
-				addView();
+				helper.addView();
 			
 			}
 		});
@@ -370,144 +365,6 @@ public class WindowBuild {
 	}
 	
 
-
-public static void clearSpace() {
-	lblMessage.setVisible(false);
-	lblMessage2.setVisible(false);
-	infoMessage.setVisible(false);
-	extra.setVisible(false);
-	textField.setVisible(false);
-	btnEnterV.setVisible(false);
-	btnEnterS.setVisible(false);
-	btnEnterB.setVisible(false);
-	viewInfo.setVisible(false);
-	shopit.setVisible(false);
-	shopit1.setVisible(false);
-	shopit2.setVisible(false);
-	buyIcon.setVisible(false);
-}
-
-public static void addView() {
-	lblMessage.setVisible(true);
-	lblMessage2.setVisible(true);
-	infoMessage.setVisible(true);
-	extra.setVisible(true);
-	textField.setVisible(true);
-	btnEnterV.setVisible(true);
-	viewInfo.setVisible(true);
-}
-
-public static void addSell() {
-	infoMessage.setVisible(true);
-	lblMessage2.setVisible(true);
-	textField.setVisible(true);
-	extra.setVisible(true);
-	btnEnterS.setVisible(true);
-}
-
-public static void addBuy() {
-	lblMessage.setVisible(true);
-	infoMessage.setVisible(true);
-	shopit.setVisible(true);
-	shopit1.setVisible(true);
-	shopit2.setVisible(true);
-	textField.setVisible(true);
-	extra.setVisible(true);
-	btnEnterB.setVisible(true);
-	buyIcon.setVisible(true);
-}
-
 //Source for all images used: iconarchive.com.
 
-public static String generateShop(Hashtable<String, Integer> prices, ArrayList<String> shop,
-		ArrayList<Integer> shopPrices, int item_compresseduranium, int item_reactorcore, int item_alientech) {
-	 Random rand = new Random();
-	  int random = rand.nextInt(101);
-      if (random < 40) {
-          int random2 = rand.nextInt(3);
-          if (random2 == 0) {
-              int flcost = rand.nextInt((prices.get("Iron teapot")/2) + 1) + 15;
-              shop.add("Iron teapot");
-              shopPrices.add(flcost);
-              return "Iron teapot: " + flcost;
-          } 
-          else if (random2 == 1) {
-              int flcost2 = rand.nextInt((prices.get("Iron spoon")/2) + 1) + 4;
-              shop.add("Iron spoon");
-              shopPrices.add(flcost2);
-              return "Iron spoon: " + flcost2;
-          }
-          else if (random2 == 2) {
-              int flcost3 = rand.nextInt((prices.get("Dihydrogen monoxide") - 1) + 1) + 1;
-              shop.add("Dihydrogen monoxide");
-              shopPrices.add(flcost3);
-              return "Dihydrogen monoxide: " + flcost3;
-          }
-      }
-      else if (random > 39 && random < 71) {
-          int random3 = rand.nextInt(2);
-          if (random3 == 0) {
-              int flcost4 = rand.nextInt((prices.get("Amethyst crystal")/2) + 1) + 100;
-              shop.add("Amethyst crystal");
-              shopPrices.add(flcost4);
-              return "Amethyst crystal: " + flcost4;
-          } 
-          else if (random3 == 1) {
-              int flcost5 = rand.nextInt((prices.get("Opal gems")/2) + 1) + 300;
-              shop.add("Opal gems");
-              shopPrices.add(flcost5);
-              return "Opal gems: " + flcost5;
-          }
-      }
-      else if (random > 70 && random < 91) {
-          int random4 = rand.nextInt(3);
-          if (random4 == 0) {
-              int flcost6 = rand.nextInt((prices.get("Book of the Dead")/2) + 1) + 1000;
-              shop.add("Book of the Dead");
-              shopPrices.add(flcost6);
-              return "Book of the Dead: " + flcost6;
-          } 
-          else if (random4 == 1) {
-              int flcost7 = rand.nextInt((prices.get("2mg of plutonium")/2) + 1) + 4000;
-              shop.add("2mg of plutonium");
-              shopPrices.add(flcost7);
-              return "2mg of plutonium: " + flcost7;
-          }
-          else if (random4 == 2) {
-              shop.add("Gravity ray");
-              shopPrices.add(7000);
-            	return "Gravity ray: " + prices.get("Gravity ray");
-          }                    
-      }
-      else if (random > 90 && random < 101) {
-          int random5 = rand.nextInt(3);
-          if (random5 == 0 && item_compresseduranium == 0) {
-        	  int flcost8 = rand.nextInt((prices.get("Compressed uranium")/2) + 1) + 19000;
-              shop.add("Compressed uranium");
-              shopPrices.add(flcost8);
-              item_compresseduranium = 1;
-              return "Compressed uranium: " + flcost8;
-          } 
-          else if (random5 == 1 && item_reactorcore == 0) {
-              int flcost9 = rand.nextInt((prices.get("Arc reactor core")/2) + 1) + 23000;
-              shop.add("Arc reactor core");
-              shopPrices.add(flcost9);
-              item_reactorcore = 1;
-              return "Arc reactor core: " + flcost9;
-          }
-          else if (random5 == 2 && item_alientech == 0) {
-              int flcost10 = rand.nextInt((prices.get("Alien tech")/2) + 1) + 30000;
-              shopPrices.add(flcost10);
-              shop.add("Alien tech");
-              item_alientech = 1;
-              return "Alien tech: " + flcost10;
-          } 
-      }
-	return null;                    
-  }
 }
-
-
-
-
-
